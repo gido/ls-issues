@@ -5,6 +5,26 @@
 
     <h1>Closed issues for "{{ repo.full_name }}"</h1>
 
+    <form action="" class="form-horizontal" method="get">
+      <div class="control-group">
+        <label class="control-label" for="inputFrom">From</label>
+        <div class="controls">
+          <input type="text" id="inputFrom" name="from" placeholder="DD/MM/YYYY" value="{{ from|default('1 month ago'|date('m/d/Y')) }}">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputto">To</label>
+        <div class="controls">
+          <input type="text" id="inputTo" name="to" placeholder="DD/MM/YYYY" value="{{ to|default('now'|date('m/d/Y')) }}">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+
     <table class="table table-striped">
         <tr>
             <th>#</th>
