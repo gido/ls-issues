@@ -1,10 +1,15 @@
-Silex - Kitchen Sink Edition
-============================
+List Github issues
+==================
 
-This project is a sample or a bootstrap silex application.
-You can use it for your next php application.
+This project is a simple webapp to list closed Github issues of a repos between 2 dates.
 
-For more informations, see the
-[**dedicated page**](http://lyrixx.github.com/Silex-Kitchen-Edition).
+## Installation
 
-[![Build Status](https://secure.travis-ci.org/lyrixx/Silex-Kitchen-Edition.png?branch=master)](http://travis-ci.org/lyrixx/Silex-Kitchen-Edition)
+```bash
+	$ composer install
+```
+
+```bash
+	$ cp resources/config/prod.php.dist resources/config/prod.php
+	$ vim resources/config/prod.php
+```
