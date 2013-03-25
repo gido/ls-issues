@@ -12,6 +12,7 @@ use Silex\Provider\ValidatorServiceProvider;
 use SilexAssetic\AsseticExtension;
 use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Antistatique\Silex\GithubApiServiceProvider;
 
 $app->register(new HttpCacheServiceProvider());
 
@@ -95,5 +96,6 @@ if (isset($app['assetic.enabled']) && $app['assetic.enabled']) {
 }
 
 $app->register(new Silex\Provider\DoctrineServiceProvider());
+$app->register(new GithubApiServiceProvider());
 
 return $app;

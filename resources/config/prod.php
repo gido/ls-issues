@@ -41,3 +41,7 @@ $app['db.options'] = array(
 
 // User
 $app['security.users'] = array('username' => array('ROLE_USER', 'password'));
+
+// Github API
+$app['github.cache'] = false;
+$app['github.cache_dir'] = $app['cache.path'].'/http_github';

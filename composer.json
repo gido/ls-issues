@@ -42,7 +42,8 @@
     },
     "autoload": {
         "psr-0": {
-            "SKE": "src/"
+            "SKE": "src/",
+            "Antistatique": "src/"
         }
     }
 }
