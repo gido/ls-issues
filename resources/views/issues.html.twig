@@ -9,14 +9,14 @@
       <div class="control-group">
         <label class="control-label" for="inputFrom">From</label>
         <div class="controls">
-          <input type="text" id="inputFrom" name="from" placeholder="DD/MM/YYYY" value="{{ from|date('d/m/Y')|default('1 month ago'|date('m/d/Y')) }}">
+          <input type="text" id="inputFrom" name="from" placeholder="DD/MM/YYYY" value="{{ from|date('d/m/Y')|default('1 month ago'|date('m/d/Y')) }}" class="datepicker" data-date-format="dd/mm/yyyy">
         </div>
       </div>
 
       <div class="control-group">
         <label class="control-label" for="inputto">To</label>
         <div class="controls">
-          <input type="text" id="inputTo" name="to" placeholder="DD/MM/YYYY" value="{{ to|date('d/m/Y')|default('now'|date('m/d/Y')) }}">
+          <input type="text" id="inputTo" name="to" placeholder="DD/MM/YYYY" value="{{ to|date('d/m/Y')|default('now'|date('m/d/Y')) }}" class="datepicker" data-date-format="dd/mm/yyyy">
         </div>
       </div>
 
