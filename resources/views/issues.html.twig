@@ -5,18 +5,18 @@
 
     <h1>Closed issues for "{{ repo.full_name }}"</h1>
 
-    <form action="" class="form-horizontal" method="get">
+    <form action="{{ path('issues', {repo: repo.full_name}) }}" class="form-horizontal" method="get">
       <div class="control-group">
         <label class="control-label" for="inputFrom">From</label>
         <div class="controls">
-          <input type="text" id="inputFrom" name="from" placeholder="DD/MM/YYYY" value="{{ from|date('d/m/Y')|default('1 month ago'|date('m/d/Y')) }}" class="datepicker" data-date-format="dd/mm/yyyy">
+          <input type="text" id="inputFrom" name="from" placeholder="YYYY-MM-DD" value="{{ from|date('Y-m-d')|default('1 month ago'|date('Y-m-d')) }}" class="datepicker" data-date-format="yyyy-mm-dd">
         </div>
       </div>
 
       <div class="control-group">
         <label class="control-label" for="inputto">To</label>
         <div class="controls">
-          <input type="text" id="inputTo" name="to" placeholder="DD/MM/YYYY" value="{{ to|date('d/m/Y')|default('now'|date('m/d/Y')) }}" class="datepicker" data-date-format="dd/mm/yyyy">
+          <input type="text" id="inputTo" name="to" placeholder="YYYY-MM-DD" value="{{ to|date('Y-m-d')|default('now'|date('Y-m-d')) }}" class="datepicker" data-date-format="yyyy-mm-dd">
         </div>
       </div>
 
@@ -27,6 +27,7 @@
 
     <table class="table table-striped">
         <tr>
+            <th>&nbsp;</th>
             <th>#</th>
             <th>Name</th>
             <th>Created At</th>
@@ -35,6 +36,7 @@
         </tr>
         {% for issue in issues %}
         <tr>
+            <th>{{ loop.index }}</th>
             <td><strong><a href="{{ issue.html_url }}">#{{ issue.number }}</a></strong></a></td>
             <td>{{ issue.title }} ({{ issue.comments }} comments)</td>
             <td>{{ issue.created_at|date("d/m/Y") }}</td>

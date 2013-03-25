@@ -4,6 +4,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
+use \DateTime;
 
 $app->match('/', function() use ($app) {
 
@@ -15,26 +16,49 @@ $app->match('/', function() use ($app) {
 
 })->bind('homepage');
 
-$app->match('/issues/{repo}', function($repo) use ($app) {
+$app->match('/issues/{repo}', function(Request $request, $repo) use ($app) {
 
     list($username, $repository) = explode('/', $repo);
-    $since = new \DateTime('1 month ago');
-    $to = new \DateTime('now');
 
-    $issues = $app['github']->api('issue')->all($username, $repository, array(
+    $from = new \DateTime($request->query->get('from', '1 month ago'));
+    $to = new \DateTime($request->query->get('to', 'now'));
+    $page = $request->query->get('p', 1);
+
+    $options = array(
         'state' => 'closed',
-        'sort' => 'updated',
-        'direction' => 'desc',
-        'since' => $since->format(\DateTime::ISO8601)
+        'sort' => 'created',
+        'direction' => 'asc',
+        'since' => $from->format(\DateTime::ISO8601),
+        'per_page' => 100,
+        'page' => $page,
+    );
 
-    ));
+    $issues = $app['github']->api('issue')->all($username, $repository, $options);
+
+    $issues = array_filter($issues, function($issue) use ($from, $to) {
+        $closedAt = new DateTime($issue['closed_at']);
+        return ($closedAt >= $from && $closedAt <= $to);
+    });
+
+    // sort by closed date
+    usort($issues, function($a, $b) {
+        $AclosedAt = new DateTime($a['closed_at']);
+        $BclosedAt = new DateTime($b['closed_at']);
+
+        if ($AclosedAt == $BclosedAt) {
+            return 0;
+        }
+
+        return ($AclosedAt < $BclosedAt) ? -1 : 1;
+    });
+
 
     $repo = $app['github']->api('repo')->show($username, $repository);
 
     return $app['twig']->render('issues.html.twig', array(
          'issues' => $issues,
          'repo' => $repo,
-         'from' => $since,
+         'from' => $from,
          'to' => $to,
      ));
 
