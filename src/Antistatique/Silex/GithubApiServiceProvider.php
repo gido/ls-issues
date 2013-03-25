@@ -18,8 +18,25 @@ class GithubApiServiceProvider implements ServiceProviderInterface
     {
         $app['github'] = $app->share(function ($app) {
             
+            $client = new Github\Client($app['github.client']);
 
-            return new Github\Client($app['github.client']);
+            if (isset($app['github.auth_method']) && $app['github.auth_method']) {
+                switch($app['github.auth_method']) {
+                    case 'http_auth':
+                        $authMethod = Github\Client::AUTH_HTTP_PASSWORD;
+                        $usernameOrToken = $app['github.username'];
+                        $secret = $app['github.password'];
+                        break;
+                    default:
+                        $authMethod = null;
+                        $usernameOrToken = null;
+                        $secret = null;
+                }
+
+                $client->authenticate($usernameOrToken, $secret, $authMethod);
+            }
+
+            return $client;
         });
 
         $app['github.client'] = $app->share(function ($app) {
