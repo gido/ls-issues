@@ -52,6 +52,12 @@ $app->match('/issues/{repo}', function(Request $request, $repo) use ($app) {
         return ($AclosedAt < $BclosedAt) ? -1 : 1;
     });
 
+    foreach($issues as &$issue) {
+        $issue['body_estimate'] = '';
+        if ($issue['body'] && preg_match('/\-{2,3}(.*)$/ms', $issue['body'], $matches)) {
+            $issue['body_estimate'] = $matches[1];
+        }
+    }
 
     $repo = $app['github']->api('repo')->show($username, $repository);
 

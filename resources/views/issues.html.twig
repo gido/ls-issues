@@ -3,11 +3,11 @@
 
 {% block content %}
 
-    <h1>Closed issues for "{{ repo.full_name }}"</h1>
+    <h2>Closed issues for "{{ repo.full_name }}"</h2>
 
     <form action="{{ path('issues', {repo: repo.full_name}) }}" class="form-horizontal" method="get">
       <div class="control-group">
-        <label class="control-label" for="inputFrom">From</label>
+        <label class="control-label" for="inputFrom">Closed From</label>
         <div class="controls">
           <input type="text" id="inputFrom" name="from" placeholder="YYYY-MM-DD" value="{{ from|date('Y-m-d')|default('1 month ago'|date('Y-m-d')) }}" class="datepicker" data-date-format="yyyy-mm-dd">
         </div>
@@ -29,19 +29,20 @@
         <tr>
             <th>&nbsp;</th>
             <th>#</th>
-            <th>Name</th>
+            <th style="width: 100%">Name</th>
             <th>Created At</th>
             <th>Closed At</th>
-            <th>Action</th>
+            <th>Comments</th>
         </tr>
         {% for issue in issues %}
         <tr>
             <th>{{ loop.index }}</th>
-            <td><strong><a href="{{ issue.html_url }}">#{{ issue.number }}</a></strong></a></td>
-            <td>{{ issue.title }} ({{ issue.comments }} comments)</td>
+            <td><strong><a href="{{ issue.html_url }}" target="_blank">#{{ issue.number }}</a></strong></a></td>
+            <td  style="width: 100%">{{ issue.title }}<br>({{ issue.comments }} comments)</td>
             <td>{{ issue.created_at|date("d/m/Y") }}</td>
             <td>{{ issue.closed_at|date("d/m/Y") }}</td>
             <td>
+              {{ issue.body_estimate }}
             </td>
         </tr>
         {% endfor %}
