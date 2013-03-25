@@ -19,12 +19,13 @@ $app->match('/issues/{repo}', function($repo) use ($app) {
 
     list($username, $repository) = explode('/', $repo);
     $since = new \DateTime('1 month ago');
+    $to = new \DateTime('now');
 
     $issues = $app['github']->api('issue')->all($username, $repository, array(
         'state' => 'closed',
-        'sort' => 'comments',
+        'sort' => 'updated',
         'direction' => 'desc',
-        //'since' => $since->format('N')
+        'since' => $since->format(\DateTime::ISO8601)
 
     ));
 
@@ -33,7 +34,8 @@ $app->match('/issues/{repo}', function($repo) use ($app) {
     return $app['twig']->render('issues.html.twig', array(
          'issues' => $issues,
          'repo' => $repo,
-         'since' => $since,
+         'from' => $since,
+         'to' => $to,
      ));
 
 })
