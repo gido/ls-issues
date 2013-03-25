@@ -1,0 +1,27 @@
+{% extends 'layout.html.twig' %}
+{% set active = 'issues' %}
+
+{% block content %}
+
+    <h1>Closed issues for "{{ repo.full_name }}"</h1>
+
+    <table class="table table-striped">
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Created At</th>
+            <th>Closed At</th>
+            <th>Action</th>
+        </tr>
+        {% for issue in issues %}
+        <tr>
+            <td><strong><a href="{{ issue.html_url }}">#{{ issue.number }}</a></strong></a></td>
+            <td>{{ issue.title }} ({{ issue.comments }} comments)</td>
+            <td>{{ issue.created_at|date("d/m/Y") }}</td>
+            <td>{{ issue.closed_at|date("d/m/Y") }}</td>
+            <td>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

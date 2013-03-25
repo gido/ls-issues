@@ -3,11 +3,26 @@
 
 {% block content %}
 
-    <h1>Hello</h1>
+    <h1>Repositories</h1>
     {% if is_granted('ROLE_USER') %}
         Hello "{{ app.security.token.username }}".<br />
         <a href="{{ path('logout') }}">{{ 'Logout'|trans }}</a>
-    {% else %}
-        Your a not logged. Please <a href="{{ path('login') }}">{{ 'connect'|trans }}</a>
     {% endif %}
+
+    <table class="table table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Short description</th>
+            <th>Action</th>
+        </tr>
+        {% for repo in repositories %}
+        <tr>
+            <td><a href="{{ path('issues', {repo: repo.full_name}) }}">{{ repo.name }}</a></td>
+            <td>{{ repo.description }}</td>
+            <td>
+                <a href="{{ repo.html_url }}" class="btn">See on Github</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

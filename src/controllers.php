@@ -7,8 +7,38 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 $app->match('/', function() use ($app) {
 
-    return $app['twig']->render('index.html.twig');
+    $repositories = $app['github']->api('organization')->repositories('Antistatique');
+
+    return $app['twig']->render('index.html.twig', array(
+        'repositories' => $repositories,
+    ));
+
 })->bind('homepage');
+
+$app->match('/issues/{repo}', function($repo) use ($app) {
+
+    list($username, $repository) = explode('/', $repo);
+    $since = new \DateTime('1 month ago');
+
+    $issues = $app['github']->api('issue')->all($username, $repository, array(
+        'state' => 'closed',
+        'sort' => 'comments',
+        'direction' => 'desc',
+        //'since' => $since->format('N')
+
+    ));
+
+    $repo = $app['github']->api('repo')->show($username, $repository);
+
+    return $app['twig']->render('issues.html.twig', array(
+         'issues' => $issues,
+         'repo' => $repo,
+         'since' => $since,
+     ));
+
+})
+->bind('issues')
+->assert('repo', '^[a-zA-Z0-9\-\._]+\/[a-zA-Z0-9\.\-_]+$');
 
 $app->match('/login', function(Request $request) use ($app) {
     $form = $app['form.factory']->createBuilder('form')
