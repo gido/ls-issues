@@ -37,6 +37,11 @@ $app->register(new SecurityServiceProvider(), array(
     ),
 ));
 
+$app['security.access_rules'] = array(
+    array('^/login$', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+    array('^.*$', 'ROLE_USER'),
+);
+
 $app['security.encoder.digest'] = $app->share(function ($app) {
     return new PlaintextPasswordEncoder();
 });
