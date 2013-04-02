@@ -23,6 +23,7 @@ $app->match('/issues/{repo}', function(Request $request, $repo) use ($app) {
     $from = new \DateTime($request->query->get('from', '1 month ago'));
     $to = new \DateTime($request->query->get('to', 'now'));
     $page = $request->query->get('p', 1);
+    $order = $request->query->get('order', 'closed_date');
 
     $options = array(
         'state' => 'closed',
@@ -40,8 +41,9 @@ $app->match('/issues/{repo}', function(Request $request, $repo) use ($app) {
         return ($closedAt >= $from && $closedAt <= $to);
     });
 
-    // sort by closed date
-    usort($issues, function($a, $b) {
+    // define sort strategy
+    $sorts = array();
+    $sorts['closed_date'] = function($a, $b) {
         $AclosedAt = new DateTime($a['closed_at']);
         $BclosedAt = new DateTime($b['closed_at']);
 
@@ -50,7 +52,20 @@ $app->match('/issues/{repo}', function(Request $request, $repo) use ($app) {
         }
 
         return ($AclosedAt < $BclosedAt) ? -1 : 1;
-    });
+    };
+    $sorts['number'] = function($a, $b) {
+        $ANumber = $a['number'];
+        $BNumber = $b['number'];
+
+        if ($ANumber == $BNumber) {
+            return 0;
+        }
+
+        return ($ANumber < $BNumber) ? -1 : 1;
+    };
+
+    // sort by closed date
+    usort($issues, $sorts[$order]);
 
     foreach($issues as &$issue) {
         $issue['body_estimate'] = '';
