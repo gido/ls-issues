@@ -30,6 +30,7 @@
             <th>&nbsp;</th>
             <th>#</th>
             <th style="width: 100%">Name</th>
+            <th>Ouvert par</th>
             <th>Created At</th>
             <th>Closed At</th>
             <th>Comments</th>
@@ -38,7 +39,13 @@
         <tr>
             <th>{{ loop.index }}</th>
             <td><strong><a href="{{ issue.html_url }}" target="_blank">#{{ issue.number }}</a></strong></a></td>
-            <td  style="width: 100%">{{ issue.title }}<br>({{ issue.comments }} comments)</td>
+            <td  style="width: 100%">
+              {{ issue.title }}<br>({{ issue.comments }} comments)
+              {% for label in issue.labels %}
+                  <span class="label" style="background-color: #{{ label.color }}">{{ label.name }}</span>
+              {% endfor %}
+            </td>
+            <td>{{ issue.user.login }}</td>
             <td>{{ issue.created_at|date("d/m/Y") }}</td>
             <td>{{ issue.closed_at|date("d/m/Y") }}</td>
             <td>
