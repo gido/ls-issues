@@ -28,11 +28,10 @@ namespace :myproject do
     end
 
     task :shared_symlinks do
-    	run "ln -nfs #{shared_path}/resources/config/prod.php #{release_path}/config/prod.php"
+    	run "ln -s #{shared_path}/resources/config/prod.php #{current_path}/resources/config/prod.php"
     end
 end
-
+	
 after "deploy:update_code", "myproject:vendors"
 after "deploy:create_symlink", "myproject:shared_symlinks"
-after "deploy:symlink", "myproject:shared_symlinks"
 after "deploy:update", "deploy:cleanup" 
